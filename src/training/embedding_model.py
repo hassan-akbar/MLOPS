@@ -4,17 +4,20 @@ from dotenv import load_dotenv
 from torchvision import models
 import torch.nn as nn
 import torch
-import os 
+import os
 from .config import get_dataloaders
 from data.preprocessing import get_transforms
 from tqdm import tqdm
+import ast
+
 
 load_dotenv()
 
-train_loader,val_loader,test_loader = get_dataloaders() 
+train_loader, val_loader, test_loader = get_dataloaders()
+
+CLASSES = ast.literal_eval(os.getenv("CLASSES"))
 
 
-CLASSES = os.getenv('CLASSES')
 # --- Model setup ---
 model = models.convnext_tiny(weights=models.ConvNeXt_Tiny_Weights.IMAGENET1K_V1)
 model.classifier[2] = nn.Linear(model.classifier[2].in_features, len(CLASSES))
@@ -34,7 +37,6 @@ scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(
 
 # --- Progressive resizing schedule ---
 size_schedule = {0: 224, 10: 256, 15: 288}
-
 
 
 mlflow.set_experiment("Pressure_Posture_Detection")
@@ -58,7 +60,7 @@ with mlflow.start_run(run_name="ConvNeXtTiny_Resize-Oversampled"):
             new_size = size_schedule[epoch]
             print(f"\n🔁 Changing input size to {new_size}x{new_size}")
 
-            train_trfm,val_trfm = get_transforms(new_size)
+            train_trfm, val_trfm = get_transforms(new_size)
             train_loader.dataset.transform = train_trfm
             val_loader.dataset.transform = val_trfm
 
