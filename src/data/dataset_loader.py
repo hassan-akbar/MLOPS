@@ -1,6 +1,7 @@
 from torch.utils.data import Dataset
 import os
 from PIL import Image
+
 CLASSES = ["left", "right", "supine", "outofbed", "prone"]
 
 

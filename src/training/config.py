@@ -12,6 +12,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
 # --- Constants ---
 def get_dataloaders():
     CLASSES = ["left", "right", "supine", "outofbed", "prone"]
@@ -24,7 +25,6 @@ def get_dataloaders():
     # --- Transforms ---
     train_tfms, val_tfms = get_transforms(img_size=224)
 
-
     # --- Load entire dataset ---
     print("🔹 Loading dataset...")
     dataset_rgb = PressureDistributionDataset(
@@ -33,7 +33,6 @@ def get_dataloaders():
 
     # Extract numeric labels for stratification
     labels = [label for _, label in dataset_rgb.samples]
-
 
     # --- Stratified split (80/20) ---
     train_idx, val_idx = train_test_split(
@@ -83,6 +82,4 @@ def get_dataloaders():
         test_ds_rgb, batch_size=BATCH_SIZE, shuffle=False, num_workers=NUM_WORKERS
     )
 
-    return train_loader_rgb,test_loader_rgb,val_loader_rgb
-
-
+    return train_loader_rgb, test_loader_rgb, val_loader_rgb
