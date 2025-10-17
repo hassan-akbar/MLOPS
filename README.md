@@ -36,12 +36,7 @@ Serverless inference and training code for a **posture detection pipeline** buil
 
 ## 🚀 Quickstart (Inference)
 
-### 1. Install Dependencies
-
-```bash
-pip install -r requirements.txt
-pip install -r src/inference/requirements.txt
-```
+### 1. Install Docker
 
 ### 2. Docker Build & Local Lambda Emulation
 
@@ -130,5 +125,3 @@ curl -XPOST "http://localhost:9000/2015-03-31/functions/function/invocations" \
 - Example experiments and model-selection notebooks are in [`src/notebooks/model_selection.ipynb`](src/notebooks/model_selection.ipynb).
 
 ---
-
-Would you like me to append a short optional **“CI/CD with GitHub Actions → ECR → Lambda”** section at the end of this README so it’s fully ready for publishing?
