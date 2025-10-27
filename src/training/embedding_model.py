@@ -13,7 +13,7 @@ import ast
 
 load_dotenv()
 
-train_loader, val_loader, test_loader = get_dataloaders()
+train_loader, _, val_loader, test_loader = get_dataloaders()
 
 CLASSES = ast.literal_eval(os.getenv("CLASSES"))
 

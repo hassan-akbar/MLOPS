@@ -81,5 +81,10 @@ def get_dataloaders():
     test_loader_rgb = DataLoader(
         test_ds_rgb, batch_size=BATCH_SIZE, shuffle=False, num_workers=NUM_WORKERS
     )
+    train_classifier_loader = DataLoader(
+        train_ds_rgb,
+        batch_size=BATCH_SIZE,
+        num_workers=NUM_WORKERS,
+    )
 
-    return train_loader_rgb, test_loader_rgb, val_loader_rgb
+    return train_loader_rgb, train_classifier_loader, test_loader_rgb, val_loader_rgb

@@ -10,11 +10,12 @@ import numpy as np
 from xgboost import XGBClassifier
 import joblib
 import ast
+from sklearn.utils.class_weight import compute_sample_weight
 
 
 load_dotenv()
 
-train_loader, val_loader, test_loader = get_dataloaders()
+_,train_loader, val_loader, test_loader = get_dataloaders()
 
 CLASSES = ast.literal_eval(os.getenv("CLASSES"))
 
@@ -28,7 +29,7 @@ model.classifier[2] = nn.Linear(model.classifier[2].in_features, len(CLASSES))
 # 2️⃣ Load saved weights
 model.load_state_dict(
     torch.load(
-        "/Users/hassan/Documents/Projects/MLOPS/models/ConvNeXtTiny_Resize_Oversampled.pth",
+        "/Users/hassan/Documents/Projects/MLOPS/models/embedding_model.pth",
         map_location="cpu",
     )
 )
@@ -78,10 +79,13 @@ xgb = XGBClassifier(
     random_state=42,
 )
 
-xgb.fit(X_train, y_train)
+sample_weights = compute_sample_weight("balanced", y_train)
+xgb.fit(X_train, y_train, sample_weight=sample_weights)
+
 xgb_preds = xgb.predict(X_val)
 
 print("📈 XGBoost Results:")
 print(classification_report(y_val, xgb_preds, target_names=CLASSES))
 
-joblib.dump(xgb, "xgboost_model.pkl")
+# Save the model in JSON format
+xgb.save_model('classifier.json')
